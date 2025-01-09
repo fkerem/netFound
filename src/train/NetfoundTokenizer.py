@@ -125,15 +125,15 @@ class NetFoundTokenizer(PreTrainedTokenizer):
         ]
 
     @staticmethod
-    def multiply_burst_values(flows: list[list[float]], multiplier: float) -> list[list[float]]:
+    def multiply_burst_values(flows: list[list[float]], multiplier: float, ftype=float) -> list[list[float]]:
         return [
-            [burst_value * multiplier for burst_value in flow]
+            [ftype(burst_value * multiplier) for burst_value in flow]
             for flow in flows
         ]
 
     def tokenize(self, text, **kwargs):
         dataset: LazyBatch = text
-        dataset['iats'] = self.multiply_burst_values(dataset['iats'], 1e-3)
+        dataset['iats'] = self.multiply_burst_values(dataset['iats'], 1e-3, int)
         dataset_burst_sizes = [[len(burst) for burst in flow] for flow in dataset["burst_tokens"]]
 
         if not self.pretraining and "labels" in dataset:

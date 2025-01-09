@@ -1,15 +1,3 @@
-Following are the instructions to create the tokens from Nprint vectors.
-
-Add the input and output directory in a Config.json file following the example of UCSBPretrainingConfig.json for pretraining or UCSBFinetuningConfig.json for Finetuning.
-
-Add the reference of the Config file in the `TokenizeNpt.py` file and run to get the tokens and metadata for each flow
-
-`Tokenize.py` is the counterpart where Nprint is not used and csvs with relevant fields are used instead.
-
-Next to collect the tokens and meta data into a single file use the CollectTokensInFiles.py add the output folder used in the TokenizeNpt.py as `dirpath` and output file as `outputpath`. Also set the flag for finetuning depending on the use case.
-
-If the dataset is for finetuning, we need to split the test and train datasets. `SplitToTestTrain.py` is used to split the test and train datasets. Update the paths to the entire dataset, test dataset and train dataset
-
 ## Field extraction
 
 input: merged pcap with flows

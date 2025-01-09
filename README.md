@@ -4,8 +4,22 @@ This is a source code for the netFound model by the Systems & Networking Lab, UC
 
 ## Description
 
+netFound is a network traffic foundation model that uses transformer architecture and includes a pretraining phase on unlabeled data to achieve high results.  
+
+Key features:
+- netFound takes raw PCAP data as input
+- netFound can (and need) be pretrained on the unlabeled dataset
+- netFound uses Hierarchical Transformer architecture to take into account packet burst and flow behavior
+- netFound uses burst metadata (inter arrival time, number of bytes per burst, etc)
+
+Corresponding paper: https://arxiv.org/abs/2310.17025
+
 ## Checkpoint
-TODO: here there will be a link to a pretrained checkpoint
+TODO: here there will be a link to a pretrained checkpoint.  
+
+The checkpoint is pretrained on XX mln flows of the real-world network traffic of the University of California, Santa Barbara.  
+
+Pretrained model metrics:
 
 ## How to use
 

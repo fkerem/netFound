@@ -25,7 +25,34 @@ You can explore how Makefile and Dockerfile are constructed:
 
 ### Bring Your Own Data
 
+To use your own data, the easy way is to run the scripts/preprocess_data.py on your dataset.  
+For pretraining, create the next folder structure:
+  - folder_name
+    - raw
+      - *.pcap
 
+Then run the scripts/preprocess_data.py on the folder_name:  
+`python3 scripts/preprocess_data.py --input_folder folder_name --action pretrain --tokenizer_config configs/TestPretrainingConfig.json --combined`
+- The script will create intermediate folders (extracted, split, etc). The resulting tokens would be in the "tokens" folder.
+- You can use different tokenizer config (mostly to change internal and external IPs to define directions)
+- You can remove --combined flags to create multiple arrow files (one per original pcap). This is usually better for parallelization between nodes when using multiple data loaders.
+- You can use --tcp_options to include TCPOptions in the data, but for this your data need to be preprocessed with additional flag "1" (as a last argument) when using 3_extract_fields (to include tcpoptions) and config file with TCPOptions should be provided
+
+For fine-tuning, use the same structure as for pretraining, but separate different classes to different folders.
+- folder_name1
+  - raw
+    - *.pcap
+- folder_name2
+  - raw
+    - *.pcap
+
+Then run the scripts/preprocess_data.py on the folder_name:  
+`python3 scripts/preprocess_data.py --input_folder folder_name --action finetune --tokenizer_config configs/TestPretrainingConfig.json --combined`
+
+- **Attention**: folder names should be integers (1, 2, 3, etc.) and will be used as class labels. Only integer numbers are supported as class labels.
+- The resulting arrow files (preprocessed data) have the "labels" column which can be modified manually if needed to change the corresponding labels (incl. for regression labels)
+
+  
 ## How to cite
 ```
 @misc{guthula2024netfoundfoundationmodelnetwork,

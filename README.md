@@ -19,7 +19,8 @@ TODO: here there will be a link to a pretrained checkpoint.
 
 The checkpoint is pretrained on XX mln flows of the real-world network traffic of the University of California, Santa Barbara.  
 
-Pretrained model metrics:
+Pretrained model metrics:  
+TODO
 
 ## How to use
 

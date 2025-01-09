@@ -5,6 +5,8 @@ Data for pretraining should be located in folder X, which should have the folder
 Data for finetuning should have N folders (for each class if classification) and each of these folders should have the "raw" folder with pcaps.  
 See data/test for example.
 
+See scripts/preprocess_data.py for details.
+
 ## Field extraction
 
 input: merged pcap with flows

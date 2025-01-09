@@ -27,5 +27,6 @@ RUN wget https://github.com/seladb/PcapPlusPlus/releases/download/v24.09/pcapplu
 ENV PATH="/usr/local/pcapplusplus/bin:$PATH"
 
 COPY . .
+RUN find . -type f -name "*.sh" -exec chmod +x {} \;
 
 CMD ["bash"]

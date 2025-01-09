@@ -16,3 +16,4 @@ pyarrow
 deepspeed
 accelerate
 tensorboard
+torchinfo

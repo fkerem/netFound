@@ -1,9 +1,16 @@
+# Data preprocessing
+
+TL;DR:  
+Data for pretraining should be located in folder X, which should have the folder "raw" inside which should have pcaps.  
+Data for finetuning should have N folders (for each class if classification) and each of these folders should have the "raw" folder with pcaps.  
+See data/test for example.
+
 ## Field extraction
 
 input: merged pcap with flows
 
 1. Process all pcaps and leave only tcp/udp/icmp packets
-`./1_tshark_extraction.sh input_folder output_folder`
+`./1_filter.sh input_folder output_folder`
 2. split pcap by flows  
 `./2_pcap_splitting.sh input_folder output_folder`
 3. extract packet features from each flow

@@ -38,6 +38,8 @@ Pretrained model metrics:
   eval_weighted_mlm_prec            =     0.8816
   eval_weighted_mlm_recall          =     0.8514
   perplexity                        =     6.5842
+  
+  Total params: 779,235,978
 ```
 
 ## How to use

@@ -16,7 +16,7 @@ Corresponding paper: https://arxiv.org/abs/2310.17025
 
 ## Checkpoint
 
-https://huggingface.co/snlucsb/netFound-780M-base
+https://huggingface.co/snlucsb/netFound-640M-base
 
 The checkpoint is pretrained on ~450mln flows of the real-world network traffic of the University of California, Santa Barbara.  
 
@@ -39,7 +39,7 @@ Pretrained model metrics:
   eval_weighted_mlm_recall          =     0.8514
   perplexity                        =     6.5842
   
-  Total params: 779,235,978
+  Total params:  643,825,672
 ```
 
 ## How to use

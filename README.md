@@ -15,12 +15,30 @@ Key features:
 Corresponding paper: https://arxiv.org/abs/2310.17025
 
 ## Checkpoint
-TODO: here there will be a link to a pretrained checkpoint.  
 
-The checkpoint is pretrained on XX mln flows of the real-world network traffic of the University of California, Santa Barbara.  
+https://huggingface.co/snlucsb/netFound-780M-base
+
+The checkpoint is pretrained on ~450mln flows of the real-world network traffic of the University of California, Santa Barbara.  
 
 Pretrained model metrics:  
-TODO
+```
+  eval_loss                         =     1.8847
+  eval_macro_mlm_f1                 =     0.4038
+  eval_macro_mlm_prec               =     0.7205
+  eval_macro_mlm_recall             =     0.3005
+  eval_mlm_acc                      =     0.8514
+  eval_swapped_macro_pred_f1        =     0.9605
+  eval_swapped_macro_pred_prec      =      0.963
+  eval_swapped_macro_pred_recall    =     0.9603
+  eval_swapped_pred_acc             =     0.9605
+  eval_swapped_weighted_pred_f1     =     0.9605
+  eval_swapped_weighted_pred_prec   =     0.9628
+  eval_swapped_weighted_pred_recall =     0.9605
+  eval_weighted_mlm_f1              =     0.8451
+  eval_weighted_mlm_prec            =     0.8816
+  eval_weighted_mlm_recall          =     0.8514
+  perplexity                        =     6.5842
+```
 
 ## How to use
 

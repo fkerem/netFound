@@ -1,26 +1,22 @@
 # netFound: Foundation Model for Network Security
-
-This is a source code for the netFound model by the Systems & Networking Lab, UC Santa Barbara
-
+This repository contains the **source code for netFound**, a foundation model for network telemetry developed by the **Systems & Networking Lab (SNL) at UC Santa Barbara**.
 ## Description
-
-netFound is a network traffic foundation model that uses transformer architecture and includes a pretraining phase on unlabeled data to achieve high results.  
-
-Key features:
-- netFound takes raw PCAP data as input
-- netFound can (and need) be pretrained on the unlabeled dataset
-- netFound uses Hierarchical Transformer architecture to take into account packet burst and flow behavior
-- netFound uses burst metadata (inter arrival time, number of bytes per burst, etc)
-
+netFound is designed to learn **spatial-temporal relationships** from raw network traffic, making it a powerful tool for network analysis, anomaly detection, and traffic prediction. 
+## :key: Key Features 
+- **Raw Packet Processing**: Directly processes raw *PCAP* files as input, enabling full-scale network traffic analysis. 
+- **Pretraining on Unlabeled Data**: Requires pretraining on large-scale, *unlabeled* network telemetry datasets, leveraging *self-supervised learning*. 
+- **Hierarchical Transformer Architecture**: Captures both *packet bursts* and *flow-level behavior*, ensuring robust feature extraction. 
+- **Metadata-Aware Processing**: Integrates **burst-level metadata** such as: 
+  - Inter-arrival time*
+  - Number of bytes per burst
+  - Packet-level timing and structure 
+## :pushpin: Why Use netFound? 
+netFound is part of a larger effort to develop **self-driving networks**—autonomous, adaptive network systems that require minimal human intervention. By leveraging *network foundation models*, we aim to improve the efficiency and scalability of *AI-powered Network Operations (AIOps)*. 
 Corresponding paper: https://arxiv.org/abs/2310.17025
-
 ## Checkpoint
-
 https://huggingface.co/snlucsb/netFound-640M-base
-
-The checkpoint is pretrained on ~450mln flows of the real-world network traffic of the University of California, Santa Barbara.  
-
-Pretrained model metrics:  
+The checkpoint is pretrained on ~450mln flows of the real-world network traffic of the University of California, Santa Barbara. 
+Pretrained model metrics: 
 ```
   eval_loss                         =     1.8847
   eval_macro_mlm_f1                 =     0.4038
@@ -38,68 +34,114 @@ Pretrained model metrics:
   eval_weighted_mlm_prec            =     0.8816
   eval_weighted_mlm_recall          =     0.8514
   perplexity                        =     6.5842
-  
   Total params:  643,825,672
 ```
+## :rocket: Quick Start: Running netFound with Docker & Makefile 
+The *easiest way* to verify that the *preprocessing code and model work correctly* is to use the *provided Dockerfile and Makefile*. This setup ensures a *reproducible environment* with all dependencies installed and includes a *small test dataset* to validate the pipeline. 
+### :hammer_and_wrench: **Step 1: Build the Docker Container** 
+Run the following command to build the container: 
+```sh
+docker build -t netfound:test .
+``` 
+This will create a Docker image named `netfound:test`, including the *source code* and a *test dataset* located in `data/test`. 
+### :arrow_forward: **Step 2: Run the Container** 
+Start an interactive session inside the container: 
+```sh
+docker run -it netfound:test
+``` 
+This will launch a shell inside the container in the `/workspace` directory. 
+### :zap: **Step 3: Run the Full Pipeline** 
+Inside the container, execute: 
+```sh
+make all
+``` 
+This will sequentially run the following *three steps* on the test dataset: 
+1. **Preprocessing**: Converts raw PCAP files into a format suitable for training. 
+2. **Pretraining**: Runs *self-supervised learning* on preprocessed data. 
+3. **Finetuning**: Adapts the model for downstream tasks using the preprocessed test dataset. 
 
-## How to use
-
-### Start here
-The easiest way to check that the preprocessing code and model work is to use the provided Dockerfile and Makefile.
-
-1. Build a docker container: `docker build -t netfound:test .`. The docker container will contain the source code and the small test dataset, located in the folder data/test.
-2. Run the container: `docker run -it netfound:test`. You should have a shell inside the container in the folder /workspace.
-3. Run `make all` to start the preprocessing, pretraining, and finetuning of the netFound model on the test data.
-
-You can explore how Makefile and Dockerfile are constructed:
-1. Dockerfile creates a container that has all the dependencies installed
-2. data/test folder contains raw pcap files in a certain format to be preprocessed
-3. Makefile:preprocess contains instructions on how to run the preprocessing code which will filter, split, and tokenize the data.
-4. Makefile:pretrain contains instructions on how to run the pretraining on the preprocessed data.
-5. Makefile:finetune contains instructions on how to run the finetuning on the preprocessed data.
-
-### Bring Your Own Data
-
-To use your own data, the easy way is to run the scripts/preprocess_data.py on your dataset.  
-For pretraining, create the next folder structure:
-  - folder_name
-    - raw
-      - *.pcap
-
-Then run the scripts/preprocess_data.py on the folder_name:  
-`python3 scripts/preprocess_data.py --input_folder folder_name --action pretrain --tokenizer_config configs/TestPretrainingConfig.json --combined`
-- The script will create intermediate folders (extracted, split, etc). The resulting tokens would be in the "tokens" folder.
-- You can use different tokenizer config (mostly to change internal and external IPs to define directions)
-- You can remove --combined flags to create multiple arrow files (one per original pcap). This is usually better for parallelization between nodes when using multiple data loaders.
-- You can use --tcp_options to include TCPOptions in the data, but for this your data need to be preprocessed with additional flag "1" (as a last argument) when using 3_extract_fields (to include tcpoptions) and config file with TCPOptions should be provided
-
-For fine-tuning, use the same structure as for pretraining, but separate different classes to different folders.
-- folder_name1
-  - raw
-    - *.pcap
-- folder_name2
-  - raw
-    - *.pcap
-
-Then run the scripts/preprocess_data.py on the folder_name:  
-`python3 scripts/preprocess_data.py --input_folder folder_name --action finetune --tokenizer_config configs/TestPretrainingConfig.json --combined`
-
-- **Attention**: folder names should be integers (1, 2, 3, etc.) and will be used as class labels. Only integer numbers are supported as class labels.
-- The resulting arrow files (preprocessed data) have the "labels" column which can be modified manually if needed to change the corresponding labels (incl. for regression labels)
-
-  
+## :building_construction: **Understanding the Makefile & Dockerfile** 
+The *Dockerfile and Makefile* automate the pipeline and provide a structured workflow: 
+### :pushpin: **Dockerfile** 
+- Creates a *containerized environment* with all necessary dependencies installed. 
+- Ensures consistent execution across different systems. 
+### :pushpin: **Test Dataset (`data/test/`)** 
+- Contains *raw PCAP files* formatted for preprocessing. 
+- Used to verify the pipeline’s functionality. 
+### :pushpin: **Makefile Structure** 
+- **`make preprocess`**: 
+  - Filters, splits, and tokenizes the raw packet data. 
+- **`make pretrain`**: 
+  - Runs **self-supervised pretraining** on the preprocessed dataset. 
+- **`make finetune`**: 
+  - Trains the model on task-specific labeled data. 
+# :rocket: Bring Your Own Data (BYOD) 
+To train or fine-tune **netFound** on your own dataset, follow the steps below to **preprocess and tokenize your PCAP files**. 
+## :pushpin: Preprocessing Your Dataset 
+The easiest way to preprocess your dataset is to use the **`scripts/preprocess_data.py`** script. 
+### :open_file_folder: Folder Structure for Pretraining 
+Organize your dataset as follows: 
+```
+folder_name/
+ ├── raw/
+ │   ├── file1.pcap
+ │   ├── file2.pcap
+ │   ├── ...
+```
+Then, run the following command: 
+```bash
+python3 scripts/preprocess_data.py --input_folder folder_name --action pretrain --tokenizer_config configs/TestPretrainingConfig.json --combined
+```
+:small_blue_diamond: **What happens next?** 
+- The script will generate **intermediate folders** (`extracted`, `split`, etc.). 
+- The resulting **tokenized data** will be stored in the `"tokens"` folder. 
+- The **`--combined`** flag merges all tokenized files into a single **Arrow** file (useful for training). 
+- If you **remove `--combined`**, multiple **Arrow** files (one per PCAP) will be created—this is beneficial for parallel processing across multiple nodes. 
+- You can **modify the tokenizer configuration** (`configs/TestPretrainingConfig.json`) to control how internal and external IPs are handled. 
+### :open_file_folder: Folder Structure for Fine-Tuning 
+To fine-tune netFound, structure your dataset into **class-separated folders**, where **folder names should be integers** (used as class labels). 
+```
+folder_name1/
+ ├── raw/
+ │   ├── class1_sample1.pcap
+ │   ├── class1_sample2.pcap
+ │   ├── ...
+folder_name2/
+ ├── raw/
+ │   ├── class2_sample1.pcap
+ │   ├── class2_sample2.pcap
+ │   ├── ...
+```
+Run the preprocessing script again, changing the `--action` to `finetune`: 
+```bash
+python3 scripts/preprocess_data.py --input_folder folder_name --action finetune --tokenizer_config configs/TestPretrainingConfig.json --combined
+```
+:small_blue_diamond: **Fine-Tuning Notes:** 
+- **Class labels must be integers** (e.g., `1, 2, 3, ...`). 
+- The resulting **Arrow files** will include a `"labels"` column. 
+- You can **manually edit the `"labels"` column** for **custom class adjustments** (including regression tasks). 
+## :wrench: Advanced Options 
+### **Handling TCP Options** 
+- To include **TCPOptions** in your preprocessed data, use the `--tcp_options` flag: 
+```bash
+python3 scripts/preprocess_data.py --input_folder folder_name --action pretrain --tokenizer_config configs/TCPOptionsConfig.json --combined --tcp_options
+```
+- **Prerequisite**: Your dataset must be **preprocessed with an additional flag** when using `3_extract_fields.py`: 
+```bash
+python3 scripts/3_extract_fields.py input.pcap output.pcap 1
+```
+- Ensure you use a **config file that includes TCPOptions processing** (e.g., `configs/TCPOptionsConfig.json`). 
 ## How to cite
 ```
 @misc{guthula2024netfoundfoundationmodelnetwork,
-      title={netFound: Foundation Model for Network Security}, 
+      title={netFound: Foundation Model for Network Security},
       author={Satyandra Guthula and Roman Beltiukov and Navya Battula and Wenbo Guo and Arpit Gupta},
       year={2024},
       eprint={2310.17025},
       archivePrefix={arXiv},
       primaryClass={cs.NI},
-      url={https://arxiv.org/abs/2310.17025}, 
+      url={https://arxiv.org/abs/2310.17025},
 }
 ```
-
 ## Acknowledgements
-This research used resources of the National Energy Research Scientific Computing Center, a DOE Office of Science User Facility supported by the Office of Science of the U.S. Department of Energy under Contract No. DE-AC02-05CH11231 using NERSC award NERSC DDR-ERCAP0029768.
+NSF Awards CNS-2323229, OAC-2126327, and OAC2126281 supported this work. This research used resources at the National Energy Research Scientific Computing Center (NERSC), a DOE Office of Science User Facility supported by the Office of Science of the U.S. Department of Energy under Contract No. DE-AC02-05CH11231 using NERSC award NERSC DDR-ERCAP0029768. Additionally, we would like to thank Cisco Research for their support.

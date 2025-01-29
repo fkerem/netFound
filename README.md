@@ -135,7 +135,7 @@ python3 scripts/3_extract_fields.py input.pcap output.pcap 1
 ```
 @misc{guthula2024netfoundfoundationmodelnetwork,
       title={netFound: Foundation Model for Network Security},
-      author={Satyandra Guthula and Roman Beltiukov and Navya Battula and Wenbo Guo and Arpit Gupta},
+      author={Satyandra Guthula and Roman Beltiukov and Navya Battula and Wenbo Guo and Arpit Gupta and Inder Monga},
       year={2024},
       eprint={2310.17025},
       archivePrefix={arXiv},

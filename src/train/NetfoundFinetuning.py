@@ -35,7 +35,7 @@ from sklearn.metrics import (
 from NetFoundDataCollator import DataCollatorForFlowClassification
 from NetFoundModels import NetfoundFinetuningModel, NetfoundNoPTM
 from NetFoundTrainer import NetfoundTrainer
-from NetfoundConfig import NetfoundConfig, NetFoundTCPOptionsConfig
+from NetfoundConfig import NetfoundConfig, NetFoundTCPOptionsConfig, NetFoundLarge
 from NetfoundTokenizer import NetFoundTokenizer
 from utils import ModelArguments, CommonDataTrainingArguments, freeze, verify_checkpoint, \
     load_train_test_datasets, get_90_percent_cpu_count, get_logger, init_tbwriter, update_deepspeed_config, \
@@ -60,6 +60,12 @@ class FineTuningDataTrainingArguments(CommonDataTrainingArguments):
         default=0,
         metadata={
             "help": "noise rate"
+        },
+    )
+    netfound_large: bool = field(
+        default=False,
+        metadata={
+            "help": "Use the large configuration for netFound model"
         },
     )
 
@@ -124,6 +130,11 @@ def main():
         no_meta=data_args.no_meta,
         flat=data_args.flat,
     )
+    if data_args.netfound_large:
+        config.hidden_size = NetFoundLarge().hidden_size
+        config.num_hidden_layers = NetFoundLarge().num_hidden_layers
+        config.num_attention_heads = NetFoundLarge().num_attention_heads
+
     config.pretraining = False
     config.num_labels = data_args.num_labels
     config.problem_type = data_args.problem_type

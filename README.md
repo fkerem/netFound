@@ -101,13 +101,12 @@ python3 scripts/preprocess_data.py --input_folder folder_name --action pretrain 
 ### :open_file_folder: Folder Structure for Fine-Tuning 
 To fine-tune netFound, structure your dataset into **class-separated folders**, where **folder names should be integers** (used as class labels). 
 ```
-folder_name1/
- ├── raw/
+raw/
+ ├── 0/
  │   ├── class1_sample1.pcap
  │   ├── class1_sample2.pcap
  │   ├── ...
-folder_name2/
- ├── raw/
+ ├── 1/
  │   ├── class2_sample1.pcap
  │   ├── class2_sample2.pcap
  │   ├── ...

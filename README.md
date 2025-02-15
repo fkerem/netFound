@@ -15,7 +15,8 @@ netFound is part of a larger effort to develop **self-driving networks**—auton
 Corresponding paper: https://arxiv.org/abs/2310.17025
 ## Checkpoint
 https://huggingface.co/snlucsb/netFound-640M-base
-The checkpoint is pretrained on ~450mln flows of the real-world network traffic of the University of California, Santa Barbara. 
+The checkpoint is pretrained on ~450mln flows of the real-world network traffic of the University of California, Santa Barbara.  
+As the checkpoint is built on the Large version of the netFound, use `--netfound_large True` as a fine-tuning flag.  
 Pretrained model metrics: 
 ```
   eval_loss                         =     1.8847

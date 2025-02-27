@@ -5,8 +5,6 @@ DATA_DIR = data/test
 # Targets
 all: clean compile preprocess pretrain finetune
 
-notrain: clean compile preprocess
-
 clean:
 	rm -rf $(PREPROCESS_BUILD_DIR)
 	rm -f src/pre_process/1_filter

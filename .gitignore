@@ -1,4 +1,5 @@
 **/.idea
+env/
 venv/
 **/cmake-build-debug
 **/.PVS-Studio
@@ -14,3 +15,4 @@ src/pre_process/3_field_extraction
 models/
 example.log
 **/.env
+**/.DS_Store

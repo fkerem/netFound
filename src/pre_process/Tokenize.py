@@ -44,7 +44,7 @@ def get_protocol(file_name: str) -> Optional[Protocol]:
         return None
 
 
-def tokenize_file(inpt_file, label) -> Optional[list]:
+def tokenize_file(inpt_file, label, config) -> Optional[list]:
     try:
         bursts, flowDur = get_bursts_from_flow_file(inpt_file)
 
@@ -385,6 +385,7 @@ def tokenizer_helper(
         output_filename: str,
         tokenization_args: List[Tuple[str, Optional[str]]],
         batch_size: Optional[int] = 1000,
+        config=None,  # Add config as an argument
 ) -> None:
     flow_duration_type = pa.uint64()
     burst_tokens_type = pa.list_(pa.list_(pa.uint16()))
@@ -415,7 +416,7 @@ def tokenizer_helper(
         with pa.ipc.new_stream(sink, schema=table_schema) as writer:
             total_files = len(tokenization_args)
             for i, (inpt_file, label) in enumerate(tokenization_args, start=1):
-                result = tokenize_file(inpt_file, label)
+                result = tokenize_file(inpt_file, label, config)
 
                 if result is not None:
                     result[1] = slice_bytes_to_16bit_tokens(result[1])
@@ -510,7 +511,7 @@ if __name__ == "__main__":
     # split args to cores equal lists
     args = np.array_split(args, cores)
     input_args = (
-        (join(output_dir, f"shard.{i}.arrow"), args[i], script_args.arrow_batch_size)
+        (join(output_dir, f"shard.{i}.arrow"), args[i], script_args.arrow_batch_size, config)
         for i in range(cores)
     )
 

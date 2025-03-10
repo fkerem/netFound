@@ -119,7 +119,8 @@ python3 scripts/preprocess_data.py --input_folder folder_name --action finetune 
 :small_blue_diamond: **Fine-Tuning Notes:** 
 - **Class labels must be integers** (e.g., `1, 2, 3, ...`). 
 - The resulting **Arrow files** will include a `"labels"` column. 
-- You can **manually edit the `"labels"` column** for **custom class adjustments** (including regression tasks). 
+- You can **manually edit the `"labels"` column** for **custom class adjustments** (including regression tasks).
+- As default validation data split does not shuffle the data file before the split, if your data is not shuffled, please use `scripts/shuffler.py` to shuffle the train file to ensure that the resulting test file contains instances of different classes.
 ## :wrench: Advanced Options 
 ### **Handling TCP Options** 
 - To include **TCPOptions** in your preprocessed data, use the `--tcp_options` flag: 
